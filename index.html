@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE MULE DETECTOR — a veracity audit</title>
+<style>
+  :root{--bg:#04070a;--panel:#0a1219;--ink:#c8f5e0;--dim:#5fae94;--faint:#2f5f52;--line:#123020;--grid:#0d2018;
+    --phos:#22e38a;--phos2:#3affa0;--cyan:#38d6e0;--amber:#e0a838;--red:#e05a4a;--violet:#b39ae0;--gold:#e0c040;
+    --mono:ui-monospace,"DejaVu Sans Mono",Menlo,Consolas,monospace;}
+  *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--mono);line-height:1.5}
+  body{background:linear-gradient(180deg,#04070a,#060b10)}
+  .wrap{max-width:920px;margin:0 auto;padding:24px 20px 56px}
+  .kicker{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;text-shadow:0 0 8px rgba(224,192,64,.35)}
+  h1{font-weight:700;font-size:25px;line-height:1.06;margin:0 0 8px;color:var(--phos2);text-shadow:0 0 12px rgba(58,255,160,.3)}
+  h1 em{font-style:normal;color:var(--red)}
+  p.lede{color:var(--dim);max-width:74ch;margin:0 0 12px;font-size:13px;line-height:1.65}
+  .companion{font-size:10px;color:var(--faint);border:1px solid var(--line);border-radius:6px;padding:6px 10px;margin:8px 0;display:inline-block}
+  .companion b{color:var(--gold)}
+  .tiers{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tier{font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px}
+  .tier.green{color:var(--phos);border:1px solid var(--phos)}.tier.amber{color:var(--amber);border:1px solid var(--amber)}.tier.red{color:var(--red);border:1px solid var(--red)}
+  .audit{background:linear-gradient(90deg,rgba(224,90,74,.10),transparent);border:1px solid var(--red);border-radius:8px;padding:12px 15px;margin:14px 0;font-size:12px;color:var(--dim);line-height:1.7}.audit b{color:var(--red)}.audit .p{color:var(--phos2)}.audit .g{color:var(--gold)}
+  .head{background:linear-gradient(90deg,rgba(224,192,64,.08),transparent);border:1px solid var(--gold);border-radius:8px;padding:12px 14px;margin:14px 0;font-size:13px;color:var(--dim)}.head b{color:var(--gold)}.head .big{font-size:20px;color:var(--phos2);font-weight:700}
+  .ctrls{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:14px 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+  .ctrl{display:flex;flex-direction:column;gap:3px;min-width:200px;flex:1}.ctrl label{font-size:10px;color:var(--dim)}.ctrl .val{color:var(--gold)}
+  input[type=range]{-webkit-appearance:none;appearance:none;height:4px;background:var(--grid);border-radius:2px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 0 8px var(--gold)}
+  input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--gold);border:none}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0}@media(max-width:760px){.two{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px}
+  .cardh{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+  canvas{display:block;width:100%;border-radius:5px;background:#02040699}#creach{height:250px}#ccrowd{height:250px}#c3d{height:270px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10px;color:var(--dim);margin-top:6px}.legend span{display:flex;align-items:center;gap:5px}.sw{width:12px;height:3px;border-radius:2px}
+  .lo{color:var(--faint);font-size:10px;margin-top:6px}
+  .verdict{border-left:2px solid var(--gold);padding:10px 0 10px 16px;margin:18px 0;color:var(--dim);font-size:12.5px;line-height:1.75}.verdict b{color:var(--gold)}.verdict .p{color:var(--phos2)}.verdict .r{color:var(--red)}
+  .note{font-size:10px;color:var(--faint);margin-top:18px;letter-spacing:.02em;line-height:1.85}.note b{color:var(--dim)}
+  .fail3d{color:#f0b9a0;background:#160a08;border:1px dashed var(--red);border-radius:6px;padding:12px;font-size:11px;margin-top:8px}
+</style></head>
+<body><div class="wrap">
+  <div class="kicker">zero cool · the mule detector · veracity audit by ROOT0</div>
+  <h1>The Seeded Cross is <em>not</em> a Mule detector.</h1>
+  <div class="companion">companion component to <b>the-history-of-the-psycho</b> (psychohistory) — same gas-vs-Mule axis, applied to attention kernels. Original claim by zero cool; this build is the veracity test David asked for — and the claim did not survive it.</div>
+  <p class="lede">The original page claimed the "Seeded Cross" kernel beats softmax on catching a <b>Mule</b> — one high-reach actor who correlates a bloc of the crowd — with the win <b>scaling with reach</b>. Tested here: the cross does beat <b>default-temperature</b> softmax. But that is the wrong baseline. Sharpen a plain softmax to the <b>same entropy</b> (same peakiness) and the advantage nearly vanishes — the matched softmax <b>wins at low reach</b>, and the cross pulls ahead only above ~0.2 reach, by at most 0.03. The apparent ~1.5&times; win was the cross being <b>peakier</b>, not detecting correlation. Everything here is computed live by the shipped kernels. Drag reach; watch the fair baseline.</p>
+  <div class="tiers">
+    <span class="tier green">GREEN — kernels are valid distributions (Σ=1), deterministic; the sweep is computed LIVE by the shipped code</span>
+    <span class="tier amber">AMBER — reach = a synthetic conversion model; the cross's residual edge over a FAIR (entropy-matched) softmax is ≤0.03, only at high reach</span>
+    <span class="tier red">RED — at low reach a matched softmax BEATS the cross: the raw win was sharpness; not tested on real trained-model value vectors</span>
+  </div>
+
+  <div class="audit" id="audit"></div>
+  <div class="head" id="head"></div>
+
+  <div class="ctrls">
+    <div class="ctrl"><label>Mule reach · m &nbsp;<span class="val" id="mv"></span> &nbsp;<span style="color:var(--faint)">(0 = pure gas · 0.32 = the psychohistory default)</span></label><input type="range" id="m" min="0" max="0.6" step="0.01"></div>
+  </div>
+
+  <div class="two">
+    <div class="card"><div class="cardh">2D · the reach axis · signal-bloc mass vs Mule reach (live)</div>
+      <canvas id="creach"></canvas>
+      <div class="legend"><span><span class="sw" style="background:var(--cyan)"></span>softmax T=1 (the unfair baseline)</span><span><span class="sw" style="background:var(--gold)"></span>seeded cross</span><span><span class="sw" style="background:var(--violet)"></span>softmax, entropy-matched (the FAIR baseline)</span></div>
+      <div class="lo">the gold beats cyan — but the violet is the honest comparison (a softmax sharpened to the cross's own peakiness). violet sits ON or ABOVE gold until ~0.2 reach, then dips just below. that gap is the cross's real, small edge.</div>
+    </div>
+    <div class="card"><div class="cardh">2D · the crowd · who the kernel attends to (live)</div>
+      <canvas id="ccrowd"></canvas>
+      <div class="legend"><span><span class="sw" style="background:var(--red)"></span>the Mule + converts</span><span><span class="sw" style="background:var(--faint)"></span>free crowd (gas)</span></div>
+      <div class="lo">bars = attention weight per token under the cross. drag reach up and watch the Mule's bloc light up. (a sharpened softmax lights the same bloc — that's the point.)</div>
+    </div>
+  </div>
+
+  <div class="card"><div class="cardh">3D · SCHEMATIC (not measured) · the fair edge, small and reach-dependent</div>
+    <canvas id="c3d"></canvas>
+    <div class="lo">⚠ this surface is a hand-drawn SCHEMATIC of the corrected finding — cross-minus-fair-softmax, ~0 or negative at low reach, a small ridge at high reach. it is NOT a measured sweep over N (the original 3D was a schematic mislabelled as measured; fixed). drag to orbit.</div>
+    <div id="err"></div>
+  </div>
+
+  <div class="verdict" id="verdict"></div>
+
+  <div class="note">
+    <b>what's real</b>: the kernels, the sums-to-1, and the whole reach sweep are computed live here by the shipped code (the original hardcoded sweep did not reproduce — off by up to 0.04 — so it was replaced with the live one).<br>
+    <b>the correction</b>: the original compared the cross to a DEFAULT-temperature softmax and read the gap as "Mule detection." A sharper distribution always concentrates more mass on the highest-value tokens — and the Mule's bloc IS the highest-value tokens — so ANY sharpening "wins." The fair test holds peakiness fixed (entropy-matched softmax). Under it the cross's edge is ≤0.03 and only appears above ~0.2 reach; below that a matched softmax is better. So the seeded cross is <b>not</b> a general Mule detector — it is a slightly-different sharpening with a small, real advantage in very Mule-dense régimes.<br>
+    <b>the RED wall (unchanged, and honest)</b>: real reach lives in the value vectors of a trained model, not scalar scores; the cross was never tested there. That experiment stands. Original author zero cool; veracity audit + honest rebuild by ROOT0 with AVAN — the claim tested, the readout reported as it came.
+  </div>
+</div>
+<script>
+"use strict";
+const C=getComputedStyle(document.documentElement),col=n=>C.getPropertyValue(n).trim()||"#fff";
+const $=id=>document.getElementById(id);
+let M=0.32;
+// ---- the shipped kernels, verbatim (these are what we are auditing) ----
+function median(s){const a=[...s].sort((x,y)=>x-y);const n=a.length;return n%2?a[(n-1)/2]:(a[n/2-1]+a[n/2])/2;}
+function softmaxT(s,T){const z=s.map(x=>x/T);const mx=Math.max(...z);const e=z.map(x=>Math.exp(x-mx));const Z=e.reduce((a,b)=>a+b,0);return e.map(x=>x/Z);}
+function softmax(s){return softmaxT(s,1);}
+function cross(s,T=0.8,om=1.0){const mu=median(s);const z=s.map(x=>{const d=x-mu,X=om*d,mag=Math.exp(d/T);
+  const den=1+X*X;const re=mag*(1-X*X)/den, im=mag*(2*X)/den;return {re,im};});
+  const R={re:z.reduce((a,b)=>a+b.re,0),im:z.reduce((a,b)=>a+b.im,0)};
+  let coh=z.map(zi=>Math.max(zi.re*R.re+zi.im*R.im,0));const Z=coh.reduce((a,b)=>a+b,0);
+  return Z>0?coh.map(c=>c/Z):s.map(()=>1/s.length);}
+function mul(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(r){return Math.sqrt(-2*Math.log(r()+1e-12))*Math.cos(6.283*r());}
+function makeCrowd(N,reach,signal=4.0){const r=mul(2);const s=[signal];for(let i=1;i<N;i++)s.push(gauss(r));
+  const nconv=Math.floor(reach*(N-1));for(let i=1;i<=nconv;i++)s[i]=signal*0.6+s[i]*0.3;return {s,nconv};}
+// ---- the FAIR baseline: softmax sharpened to the cross's own entropy ----
+function ent(w){let h=0;for(const p of w)if(p>1e-12)h-=p*Math.log(p);return h;}
+function matchT(s,targetH){let lo=0.02,hi=50;for(let it=0;it<60;it++){const mid=(lo+hi)/2;if(ent(softmaxT(s,mid))<targetH)lo=mid;else hi=mid;}return (lo+hi)/2;}
+function bloc(w,nconv){let b=0;for(let i=0;i<=nconv;i++)b+=w[i];return b;}
+// ---- compute the sweep LIVE (no hardcoded numbers) ----
+const MS=[0,0.05,0.1,0.2,0.32,0.5];
+const D={m:MS,softmax:[],cross:[],fair:[]};
+for(const m of MS){const {s,nconv}=makeCrowd(1024,m);const cx=cross(s);const T=matchT(s,ent(cx));
+  D.softmax.push(bloc(softmax(s),nconv));D.cross.push(bloc(cx,nconv));D.fair.push(bloc(softmaxT(s,T),nconv));}
+
+// reach chart
+const cr=$("creach"),xr=cr.getContext("2d");
+function drawReach(){
+  const dpr=Math.min(devicePixelRatio||1,2),W=cr.clientWidth||420,H=250;cr.width=W*dpr;cr.height=H*dpr;xr.setTransform(dpr,0,0,dpr,0,0);
+  const pl=40,pr=14,pt=14,pb=30,ms=D.m;
+  xr.clearRect(0,0,W,H);
+  const X=v=>pl+(v/0.6)*(W-pl-pr),Y=v=>H-pb-(v)*(H-pt-pb);
+  xr.strokeStyle=col("--grid");for(let g=0;g<=4;g++){const yy=pt+g*(H-pt-pb)/4;xr.beginPath();xr.moveTo(pl,yy);xr.lineTo(W-pr,yy);xr.stroke();}
+  xr.fillStyle=col("--faint");xr.font="8px "+col("--mono");xr.textAlign="center";for(let g=0;g<=6;g++)xr.fillText((g*0.1).toFixed(1),X(g*0.1),H-8);
+  xr.textAlign="right";for(let g=0;g<=4;g++)xr.fillText((1-g/4).toFixed(2),pl-4,pt+g*(H-pt-pb)/4+3);
+  function ln(data,c,dash){xr.strokeStyle=col(c);xr.lineWidth=2.2;xr.setLineDash(dash||[]);xr.beginPath();ms.forEach((mm,i)=>{const px=X(mm),py=Y(data[i]);i?xr.lineTo(px,py):xr.moveTo(px,py);});xr.stroke();xr.setLineDash([]);
+    ms.forEach((mm,i)=>{xr.fillStyle=col(c);xr.beginPath();xr.arc(X(mm),Y(data[i]),2.4,0,7);xr.fill();});}
+  ln(D.softmax,"--cyan");ln(D.cross,"--gold");ln(D.fair,"--violet",[4,3]);
+  xr.strokeStyle=col("--phos2");xr.setLineDash([3,3]);xr.beginPath();xr.moveTo(X(M),pt);xr.lineTo(X(M),H-pb);xr.stroke();xr.setLineDash([]);
+  xr.fillStyle=col("--dim");xr.font="9px "+col("--mono");xr.textAlign="center";xr.fillText("Mule reach  m →",W/2,H-2);
+}
+// crowd bars
+const cc=$("ccrowd"),xc=cc.getContext("2d");
+function drawCrowd(){
+  const dpr=Math.min(devicePixelRatio||1,2),W=cc.clientWidth||420,H=250;cc.width=W*dpr;cc.height=H*dpr;xc.setTransform(dpr,0,0,dpr,0,0);
+  const {s,nconv}=makeCrowd(96,M);const w=cross(s);const wmax=Math.max(...w,1e-9);
+  xc.clearRect(0,0,W,H);const pl=8,pr=8,pt=10,pb=24;const bw=(W-pl-pr)/s.length;
+  s.forEach((_,i)=>{const h=(w[i]/wmax)*(H-pt-pb);const isMule=i===0||(i>=1&&i<=nconv);
+    xc.fillStyle=isMule?col("--red"):col("--faint");xc.globalAlpha=isMule?0.95:0.5;
+    xc.fillRect(pl+i*bw,H-pb-h,Math.max(bw-0.5,1),h);xc.globalAlpha=1;});
+  xc.fillStyle=col("--dim");xc.font="9px "+col("--mono");xc.textAlign="center";
+  xc.fillText("token index (0=Mule, 1..k=converts, rest=free gas)",W/2,H-8);
+}
+function idxOf(m){let b=0;for(let i=1;i<D.m.length;i++)if(Math.abs(D.m[i]-m)<Math.abs(D.m[b]-m))b=i;return b;}
+function refresh(){
+  $("mv").textContent=M.toFixed(2);
+  const N=1024,{s,nconv}=makeCrowd(N,M);
+  const cx=cross(s),T=matchT(s,ent(cx));
+  const smB=bloc(softmax(s),nconv),cxB=bloc(cx,nconv),fairB=bloc(softmaxT(s,T),nconv);
+  const edge=cxB-fairB;
+  $("head").innerHTML='<b>at reach m='+M.toFixed(2)+' (N=1024):</b> Mule bloc = <span class="big">'+(cxB*100).toFixed(0)+'%</span> cross · <span class="big" style="color:var(--violet)">'+(fairB*100).toFixed(0)+'%</span> fair softmax &nbsp; '+(M<0.02?'<b>(pure gas — no Mule)</b>':'<b>fair edge '+(edge>=0?'+':'')+(edge*100).toFixed(1)+' pts '+(edge>0.005?'(cross ahead)':(edge<-0.005?'(FAIR SOFTMAX AHEAD)':'(tie)'))+'</b>');
+  drawReach();drawCrowd();if(gl)build3();
+}
+const A=D; const wins=A.m.filter((m,i)=>A.cross[i]>A.fair[i]+0.005).length, losses=A.m.filter((m,i)=>A.fair[i]>A.cross[i]+0.005).length;
+$("audit").innerHTML='<b>VERACITY AUDIT.</b> claim: the seeded cross catches Mules, win scales with reach. tested live: vs <span class="g">default softmax</span> the cross wins at all '+A.m.length+' reaches — but that baseline is unfair. vs an <span style="color:var(--violet)">entropy-matched softmax</span> (same peakiness), the cross wins at '+wins+' of '+A.m.length+' reaches and LOSES at '+losses+' (the low-reach end), with its best edge ≈ '+(Math.max(...A.m.map((m,i)=>A.cross[i]-A.fair[i]))*100).toFixed(1)+' pts. <span class="p">the "detection" was mostly sharpness.</span> verdict: <b>overclaimed</b> — a real but small reach-dependent edge remains at high Mule density.';
+$("verdict").innerHTML='<b>the honest resolution:</b> the psychohistory wall is real — a gas of independents is only broken by a Mule. but the seeded cross was credited with <span class="p">finding</span> the Mule when it was merely <b>sharper</b> than the softmax it was compared to. hold sharpness fixed and the credit mostly disappears: at low reach a matched softmax attends the bloc <span class="r">more</span> tightly than the cross. what genuinely survives is thin — above ~0.2 reach the cross\'s phase-coherence buys a few points over an equally-peaked softmax. that is the real, small finding, and it is worth keeping precisely because it is not the big one the page first announced. <span class="r">RED</span>, unchanged: the only test that could settle it runs on a trained model\'s value vectors, not scalar toys.';
+$("m").value=M;$("m").addEventListener("input",e=>{M=+e.target.value;refresh();});
+addEventListener("resize",refresh);
+
+// 3D — an honest SCHEMATIC of the corrected finding (cross minus fair softmax)
+let gl,pr3,az=0.7,el=0.5,drag=false,lx=0,ly=0;const c3=$("c3d");
+function boot3(){try{gl=c3.getContext("webgl")||c3.getContext("experimental-webgl");}catch(e){}
+  if(!gl){$("err").innerHTML="<div class='fail3d'><b>WebGL unavailable —</b> 3D needs it; 2D panels fully live.</div>";return false;}
+  const vs='attribute vec3 p;attribute float w;uniform mat4 mvp;varying float vw;void main(){gl_Position=mvp*vec4(p,1.0);vw=w;}';
+  const fs='precision highp float;varying float vw;void main(){vec3 lo=vec3(0.10,0.16,0.20);vec3 hi=vec3(0.88,0.75,0.25);vec3 c=mix(lo,hi,clamp(vw,0.0,1.0));gl_FragColor=vec4(c,1.0);}';
+  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+  pr3=gl.createProgram();gl.attachShader(pr3,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr3,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr3);
+  if(!gl.getProgramParameter(pr3,gl.LINK_STATUS)){$("err").innerHTML="<div class='fail3d'>shader link failed</div>";return false;}
+  c3.addEventListener("mousedown",e=>{drag=true;lx=e.clientX;ly=e.clientY;});addEventListener("mouseup",()=>drag=false);
+  addEventListener("mousemove",e=>{if(!drag)return;az+=(e.clientX-lx)*.01;el=Math.max(.15,Math.min(1.3,el+(e.clientY-ly)*.01));lx=e.clientX;ly=e.clientY;});return true;}
+function persp(f,a,n,fa){const t=1/Math.tan(f/2),nf=1/(n-fa);return new Float32Array([t/a,0,0,0,0,t,0,0,0,0,(fa+n)*nf,-1,0,0,2*fa*n*nf,0]);}
+function look(e,c,u){const s=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]],nm=v=>{const l=Math.hypot(...v)||1;return[v[0]/l,v[1]/l,v[2]/l];};
+  const cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],dt=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const z=nm(s(e,c)),x=nm(cr(u,z)),y=cr(z,x);return new Float32Array([x[0],y[0],z[0],0,x[1],y[1],z[1],0,x[2],y[2],z[2],0,-dt(x,e),-dt(y,e),-dt(z,e),1]);}
+function mmul(a,b){const o=new Float32Array(16);for(let c=0;c<4;c++)for(let r=0;r<4;r++){let s=0;for(let k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k];o[c*4+r]=s;}return o;}
+let buf,bn;
+function build3(){const NX=30,NZ=20,V=[],Wt=[];
+  // SCHEMATIC: cross-minus-fair edge — negative/near-zero at low reach, a small ridge at high reach, milder at large N
+  function edge(nx,nz){const m=(nx/(NX-1))*0.6;const nf=nz/(NZ-1);
+    var e=(-0.04+0.16*Math.max(0,m-0.18))*(0.7+0.5*(1-nf));   // ~[-0.04, +0.05]
+    return Math.max(0,Math.min(1,(e+0.05)/0.12));}            // normalize to 0..1 for colour/height
+  const XZ=(nx,nz)=>[(nx/(NX-1)-0.5)*3.2, edge(nx,nz)*1.1-0.3, (nz/(NZ-1)-0.5)*3.2];
+  for(let i=0;i<NX-1;i++)for(let j=0;j<NZ-1;j++)for(const[a,b]of[[i,j],[i+1,j],[i+1,j+1],[i,j],[i+1,j+1],[i,j+1]]){
+    const p=XZ(a,b);V.push(...p);Wt.push(edge(a,b));}
+  bn=V.length/3;buf={p:gl.createBuffer(),w:gl.createBuffer()};
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf.p);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(V),gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf.w);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(Wt),gl.STATIC_DRAW);}
+function render3(){if(!gl)return;const dpr=Math.min(devicePixelRatio||1,2),w=c3.clientWidth||420,h=270;
+  if(c3.width!==w*dpr){c3.width=w*dpr;c3.height=h*dpr;}gl.viewport(0,0,c3.width,c3.height);
+  gl.clearColor(0.01,0.02,0.03,1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);
+  const eye=[4*Math.cos(el)*Math.sin(az),4*Math.sin(el)+0.5,4*Math.cos(el)*Math.cos(az)];
+  const mvp=mmul(persp(Math.PI/4,c3.width/c3.height,.1,50),look(eye,[0,.15,0],[0,1,0]));
+  gl.useProgram(pr3);gl.uniformMatrix4fv(gl.getUniformLocation(pr3,"mvp"),false,mvp);
+  const pl=gl.getAttribLocation(pr3,"p"),wl=gl.getAttribLocation(pr3,"w");
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf.p);gl.vertexAttribPointer(pl,3,gl.FLOAT,false,0,0);gl.enableVertexAttribArray(pl);
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf.w);gl.vertexAttribPointer(wl,1,gl.FLOAT,false,0,0);gl.enableVertexAttribArray(wl);
+  gl.drawArrays(gl.TRIANGLES,0,bn);requestAnimationFrame(render3);}
+if(boot3()){build3();render3();}
+refresh();
+</script></body></html>
