@@ -1,0 +1,9 @@
+ROOT0-DLW-CHAIN-v1
+index : 1222
+slug  : the-mule-detector
+seal  : c390731393acaaaeb93dd611d8368d59c6f470ce06733495fe28c322e058ac11
+prev  : f562bc9859751a7552d984fe2e7d49489b1efa581415bdd1330992bc0296182a
+link  : ae48bb5c47f905e505eeccb88defc407312478bc33710dca53af153a829a86f5
+head  : ae48bb5c47f905e505eeccb88defc407312478bc33710dca53af153a829a86f5
+
+— the tether: link = sha256(index|slug|seal|prev). the chain head commits to the whole corpus.
